@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO Title</title>
+    <style>
+        #map,
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #opacity_control_div {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: white;
+            z-index: 1000;
+            margin: 10px;
+            padding: 5px;
+            border-radius: 5px;
+
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            background-clip: padding-box;
+        }
+
+        #opacity_control_input {
+            writing-mode: vertical-lr;
+            direction: rtl;
+        }
+
+        .leaflet-control-layers {
+            margin-right: 50px !important;
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="opacity_control_div">
+        <input id="opacity_control_input" type="range" min="0" max="1" value="1" step="any" />
+    </div>
+</body>
+<script>
+    const files = [ "TAU_LULC_1996.tif",
+                    "TAU_LULC_2001.tif",
+                    "TAU_LULC_2008.tif",
+                    "TAU_LULC_2012.tif",
+                    "TAU_LULC_2018.tif"]
+
+    var map = L.map('map').setView([-37.7, 175.0], 8);
+
+    map.createPane('basemap');
+    map.getPane('basemap').style.zIndex = 201;
+    map.createPane('overlay');
+    map.getPane('overlay').style.zIndex = 202;
+    
+    var my_layers = {}
+
+    files.forEach((file_name) => {
+        let layer = L.tileLayer("./tiles/" + file_name + "/{z}/{x}/{y}.png", {
+            maxZoom: 16,
+            tms: 1,
+            attribution: '&copy; TODO Coptyright',
+            pane: 'overlay'
+        })
+
+        my_layers[file_name] = layer
+
+        document.getElementById("opacity_control_input").addEventListener("input", (event) => {
+            console.log(event.target.value)
+            layer.setOpacity(event.target.value)
+        })
+
+        // layer.addTo(map);
+    })
+    console.log(my_layers)
+
+// L.control.layers(my_layers, {}, {collapsed: false}).addTo(map);
+L.control.layers({}, my_layers, {collapsed: false}).addTo(map);
+
+
+    let osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        pane: 'basemap'
+    });
+
+    osm.addTo(map);
+
+    let linz_basemap = L.tileLayer('https://basemaps.linz.govt.nz/v1/tiles/aerial/WebMercatorQuad/{z}/{x}/{y}.webp?api=c01k7n60pt6ncen769n72bbtm2y', {
+        maxZoom: 19,
+        attribution: '&copy; LINZ',
+        pane: 'basemap'
+    });
+
+L.control.layers({"OSM" : osm, "LINZ Basemap": linz_basemap}, {}, {collapsed: false}, "OSM").addTo(map);
+
+
+</script>
+
+</html>
