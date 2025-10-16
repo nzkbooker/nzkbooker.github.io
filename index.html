@@ -29,6 +29,29 @@
             background-clip: padding-box;
         }
 
+        #legend {
+            position: absolute;
+            bottom: 10px;
+            right: 0;
+            background-color: white;
+            z-index: 1000;
+            margin: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            background-clip: padding-box;
+
+                font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-size: 0.75rem;
+    color: #333;
+        }
+
+        #legend_colour {
+            width: 1em;
+        }
+
         #opacity_control_input {
             writing-mode: vertical-lr;
             direction: rtl;
@@ -49,6 +72,22 @@
     <div id="map"></div>
     <div id="opacity_control_div">
         <input id="opacity_control_input" type="range" min="0" max="1" value="1" step="any" />
+    </div>
+    <div id="legend">
+        <table>
+    <tr><td id="legend_colour" style="background-color: #419bdf"></td><td id="legend_text">Water</td></tr>
+    <tr><td id="legend_colour" style="background-color: #397d49"></td><td id="legend_text">Trees</td></tr>
+    <tr><td id="legend_colour" style="background-color: #b5c58f"></td><td id="legend_text">Grass</td></tr>
+    <tr><td id="legend_colour" style="background-color: #7a87c6"></td><td id="legend_text">Wetland</td></tr>
+    <tr><td id="legend_colour" style="background-color: #e49635"></td><td id="legend_text">Crops</td></tr>
+    <tr><td id="legend_colour" style="background-color: #68ab5f"></td><td id="legend_text">Scrub</td></tr>
+    <tr><td id="legend_colour" style="background-color: #c4281b"></td><td id="legend_text">Built area</td></tr>
+    <tr><td id="legend_colour" style="background-color: #4B0082"></td><td id="legend_text">Transport</td></tr>
+    <tr><td id="legend_colour" style="background-color: #dcd939"></td><td id="legend_text">Urban green</td></tr>
+    <tr><td id="legend_colour" style="background-color: #ccb879"></td><td id="legend_text">Bare land</td></tr>
+    <tr><td id="legend_colour" style="background-color: #b3ac9f"></td><td id="legend_text">Unstable ground</td></tr>
+    <tr><td id="legend_colour" style="background-color: #510400"></td><td id="legend_text">Residential</td></tr>
+        </table>
     </div>
 </body>
 <script>
@@ -105,8 +144,6 @@ L.control.layers({}, my_layers, {collapsed: false}).addTo(map);
     });
 
 L.control.layers({"OSM" : osm, "LINZ Basemap": linz_basemap}, {}, {collapsed: false}, "OSM").addTo(map);
-
-
 </script>
 
 </html>
